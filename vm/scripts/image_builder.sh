@@ -9,17 +9,20 @@ rm image-builder.tgz
 cd image-builder/images/capi
 
 # Install dependencies
+echo "Installing Packer and Ansible"
+make deps
+export PATH=$PWD/.bin:$PATH
 echo "Installing dependencies..."
 make deps-azure
 
-# Add more build targets as needed Azure
+# Set environment variables
+export AZURE_SUBSCRIPTION_ID="$(grep '^AZURE_SUBSCRIPTION_ID=' .env | cut -d '=' -f2-)"
+export AZURE_CLIENT_ID="$(grep '^AZURE_CLIENT_ID=' .env | cut -d '=' -f2-)"
+export AZURE_CLIENT_SECRET="$(grep '^AZURE_CLIENT_SECRET=' .env | cut -d '=' -f2-)"
+
+# Building Images
 echo "Building images for Azure..."
-make build-azure-sig-ubuntu-1804
-make build-azure-sig-ubuntu-2004
-make build-azure-sig-windows-2019
+make build-azure-sig-ubuntu-2204
 
 echo "Retrieving image references..."
-echo "Ubuntu 18.04: $(make build-azure-sig-ubuntu-1804 | grep -o 'SharedImageGallery:[^ ]*')" > image_references.txt
-echo "Ubuntu 20.04: $(make build-azure-sig-ubuntu-2004 | grep -o 'SharedImageGallery:[^ ]*')" >> image_references.txt
-echo "Windows 2019: $(make build-azure-sig-windows-2019 | grep -o 'SharedImageGallery:[^ ]*')" >> image_references.txt
-
+echo "Ubuntu 22.04: $(make build-azure-sig-ubuntu-2204 | grep -o 'SharedImageGallery:[^ ]*')" > image_references.txt

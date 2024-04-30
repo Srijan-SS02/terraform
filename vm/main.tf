@@ -1,8 +1,12 @@
+provider "azurerm" {
+  features {}
+}
+
 data "terraform_remote_state" "networks" {
   backend = "local"
 
   config = {
-    path = "../networks/terraform.tfstate"
+    path = "../network/terraform.tfstate"
   }
 }
 
@@ -10,14 +14,14 @@ data "terraform_remote_state" "resource_group" {
   backend = "local"
 
   config = {
-    path = "../resource_group/terraform.tfstate"
+    path = "../resource-group/terraform.tfstate"
   }
 }
 
 data "external" "image_references" {
-  program = ["cat", "image_references.txt"]
-}
+  program = ["cat", "./scripts/image-builder/images/capi/image_references.txt"]
 
+}
 
 
 # virtual machines
@@ -26,12 +30,12 @@ resource "azurerm_virtual_machine" "master_nodes" {
   name                  = "master-${count.index}"
   location              = data.terraform_remote_state.resource_group.outputs.default_resource_group_location
   resource_group_name   = data.terraform_remote_state.resource_group.outputs.default_resource_group_name
-  network_interface_ids = [element(azurerm_network_interface.master_nics.*.id, count.index)]
+  network_interface_ids = [element(data.terraform_remote_state.networks.outputs.azurerm_network_interface.master_nics.*.id, count.index)]
   vm_size               = var.machine_size
   delete_os_disk_on_termination = true
 
   storage_image_reference {
-    id = data.external.image_references.result["Ubuntu 18.04"]  # from the image builder
+    id = data.external.image_references.result["Ubuntu 22.04"]  # from the image builder
   }
 
   storage_os_disk {
@@ -63,12 +67,12 @@ resource "azurerm_virtual_machine" "worker_nodes" {
   name                  = "worker-${count.index}"
   location              = data.terraform_remote_state.resource_group.outputs.default_resource_group_location
   resource_group_name   = data.terraform_remote_state.resource_group.outputs.default_resource_group_name
-  network_interface_ids = [element(azurerm_network_interface.worker_nics.*.id, count.index)]
+  network_interface_ids = [element(data.terraform_remote_state.networks.outputs.azurerm_network_interface.worker_nics.*.id, count.index)]
   vm_size               = var.machine_size
   delete_os_disk_on_termination = true
 
   storage_image_reference {
-    id = data.external.image_references.result["Ubuntu 18.04"]
+    id = data.external.image_references.result["Ubuntu 22.04"]
   }
 
   storage_os_disk {

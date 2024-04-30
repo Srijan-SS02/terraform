@@ -33,6 +33,7 @@ resource "azurerm_subnet" "worker_subnet" {
   address_prefixes    = ["10.0.3.0/24"]
 }
 
+# network interface
 resource "azurerm_network_interface" "master" {
   name                = "${var.prefix}-nic"
   location            = data.terraform_remote_state.resource_group.outputs.default_resource_group_location
