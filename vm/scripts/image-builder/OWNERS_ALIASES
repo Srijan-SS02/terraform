@@ -1,0 +1,76 @@
+# See the OWNERS docs at https://go.k8s.io/owners
+
+aliases:
+  image-builder-maintainers:
+    - AverageMarcus
+    - jsturtevant
+    - kkeshavamurthy
+    - mboersma
+    - drew-viles
+  image-builder-reviewers:
+    - randomvariable
+  image-builder-azure-reviewers:
+    - jsturtevant
+    - mboersma
+  image-builder-openstack-reviewers:
+    - hidekazuna
+  image-builder-openstack-maintainers:
+    - yankcrime
+  image-builder-cloudstack-reviewers:
+    - rohityadavcloud
+    - davidjumani
+  image-builder-raw-maintainers:
+    - detiber
+    - thebsdbox
+  image-builder-raw-reviewers:
+    - detiber
+    - thebsdbox
+  image-builder-windows-maintainers:
+    - jsturtevant
+    - perithompson
+  cluster-api-maintainers:
+    - CecileRobertMichon
+    - enxebre
+    - fabriziopandini
+    - sbueringer
+    - vincepri
+  cluster-api-aws-maintainers:
+    - richardcase
+    - sedefsavas
+  cluster-api-azure-maintainers:
+    - CecileRobertMichon
+    - devigned
+    - jackfrancis
+    - mboersma
+  cluster-api-gcp-maintainers:
+    - cpanato
+    - dims
+    - richardcase
+  cluster-api-digitalocean-maintainers:
+    - cpanato
+    - gottwald
+    - prksu
+    - timoreimann
+  cluster-api-openstack-maintainers:
+    - chrischdi
+    - hidekazuna
+    - jichenjc
+    - mdbooth
+    - seanschneeweiss
+    - tobiasgiese
+  cluster-api-cloudstack-maintainers:
+    - rohityadavcloud
+    - davidjumani
+    - Pearl1594
+  cluster-api-vsphere-maintainers:
+    - chrischdi
+    - gab-satchi
+    - killianmuldoon
+    - randomvariable
+    - sbueringer
+    - srm09
+    - yastij
+  cluster-api-nutanix-maintainers:
+    - tuxtof
+  cluster-api-nutanix-reviewers:
+    - tuxtof

@@ -1,0 +1,242 @@
+{
+  "builders": [
+    {
+      "azure_tags": {
+        "build_date": "{{isotime}}",
+        "build_timestamp": "{{user `build_timestamp`}}",
+        "creationTimestamp": "{{isotime \"2006-01-02T15:04:05Z\"}}",
+        "image_builder_version": "{{user `ib_version`}}",
+        "kubernetes_version": "{{user `kubernetes_semver`}}",
+        "os_version": "{{user `image_sku`}}"
+      },
+      "capture_container_name": "{{user `capture_container_name`}}",
+      "capture_name_prefix": "capi-{{user `build_timestamp`}}",
+      "client_id": "{{user `client_id`}}",
+      "client_secret": "{{user `client_secret`}}",
+      "communicator": "winrm",
+      "image_offer": "{{user `image_offer` }}",
+      "image_publisher": "{{user `image_publisher` }}",
+      "image_sku": "{{user `image_sku`}}",
+      "image_version": "{{user `image_version`}}",
+      "location": "{{user `azure_location`}}",
+      "name": "vhd-{{user `build_name`}}",
+      "os_disk_size_gb": "{{user `os_disk_size_gb`}}",
+      "os_type": "Windows",
+      "private_virtual_network_with_public_ip": "{{user `private_virtual_network_with_public_ip`}}",
+      "resource_group_name": "{{user `resource_group_name`}}",
+      "storage_account": "{{user `storage_account_name`}}",
+      "subscription_id": "{{user `subscription_id`}}",
+      "type": "azure-arm",
+      "virtual_network_name": "{{user `virtual_network_name`}}",
+      "virtual_network_resource_group_name": "{{user `virtual_network_resource_group_name`}}",
+      "virtual_network_subnet_name": "{{user `virtual_network_subnet_name`}}",
+      "vm_size": "{{user `vm_size`}}",
+      "winrm_insecure": true,
+      "winrm_timeout": "10m",
+      "winrm_use_ssl": true,
+      "winrm_username": "packer"
+    },
+    {
+      "azure_tags": {
+        "build_date": "{{isotime}}",
+        "build_timestamp": "{{user `build_timestamp`}}",
+        "creationTimestamp": "{{isotime \"2006-01-02T15:04:05Z\"}}",
+        "image_builder_version": "{{user `ib_version`}}",
+        "kubernetes_version": "{{user `kubernetes_semver`}}",
+        "os_version": "{{user `image_sku`}}"
+      },
+      "client_id": "{{user `client_id`}}",
+      "client_secret": "{{user `client_secret`}}",
+      "communicator": "winrm",
+      "image_offer": "{{user `image_offer` }}",
+      "image_publisher": "{{user `image_publisher` }}",
+      "image_sku": "{{user `image_sku`}}",
+      "image_version": "{{user `image_version`}}",
+      "location": "{{user `azure_location`}}",
+      "managed_image_name": "{{user `image_name`}}-{{user `runtime`}}-{{user `build_timestamp`}}",
+      "managed_image_resource_group_name": "{{user `resource_group_name`}}",
+      "managed_image_storage_account_type": "{{user `storage_account_type`}}",
+      "name": "sig-{{user `build_name`}}",
+      "os_disk_size_gb": "{{user `os_disk_size_gb`}}",
+      "os_type": "Windows",
+      "private_virtual_network_with_public_ip": "{{user `private_virtual_network_with_public_ip`}}",
+      "shared_gallery_image_version_exclude_from_latest": "{{ user `exclude_from_latest` }}",
+      "shared_image_gallery": {
+        "community_gallery_image_id": "{{ user `community_gallery_image_id` }}",
+        "direct_shared_gallery_image_id": "{{ user `direct_shared_gallery_image_id` }}",
+        "gallery_name": "{{user `source_sig_name`}}",
+        "image_name": "{{user `source_sig_image_name`}}",
+        "image_version": "{{user `source_sig_image_version`}}",
+        "resource_group": "{{user `source_sig_resource_group_name`}}",
+        "subscription": "{{user `source_sig_subscription_id`}}"
+      },
+      "shared_image_gallery_destination": {
+        "gallery_name": "{{user `shared_image_gallery_name`}}",
+        "image_name": "{{user `image_name`}}-{{user `runtime`}}",
+        "image_version": "{{user `sig_image_version`}}",
+        "replication_regions": "{{user `replication_regions`}}",
+        "resource_group": "{{user `resource_group_name`}}",
+        "storage_account_type": "{{user `storage_account_type`}}"
+      },
+      "subscription_id": "{{user `subscription_id`}}",
+      "type": "azure-arm",
+      "virtual_network_name": "{{user `virtual_network_name`}}",
+      "virtual_network_resource_group_name": "{{user `virtual_network_resource_group_name`}}",
+      "virtual_network_subnet_name": "{{user `virtual_network_subnet_name`}}",
+      "vm_size": "{{user `vm_size`}}",
+      "winrm_insecure": true,
+      "winrm_timeout": "10m",
+      "winrm_use_ssl": true,
+      "winrm_username": "packer"
+    }
+  ],
+  "post-processors": [
+    {
+      "custom_data": {
+        "build_date": "{{isotime}}",
+        "build_name": "{{user `build_name`}}",
+        "build_timestamp": "{{user `build_timestamp`}}",
+        "build_type": "node",
+        "containerd_version": "{{user `containerd_version`}}",
+        "kubernetes_cni_semver": "{{user `kubernetes_cni_semver`}}",
+        "kubernetes_semver": "{{user `kubernetes_semver`}}",
+        "kubernetes_source_type": "{{user `kubernetes_source_type`}}",
+        "os_name": "{{user `distro_name`}}",
+        "resource_group_name": "{{user `resource_group_name`}}",
+        "storage_account_name": "{{user `storage_account_name`}}"
+      },
+      "output": "{{user `manifest_output`}}",
+      "strip_path": true,
+      "type": "manifest"
+    }
+  ],
+  "provisioners": [
+    {
+      "elevated_password": "{{.WinRMPassword}}",
+      "elevated_user": "packer",
+      "script": "ansible/windows/ansible_winrm.ps1",
+      "type": "powershell"
+    },
+    {
+      "extra_arguments": [
+        "-e",
+        "ansible_winrm_server_cert_validation=ignore ansible_winrm_operation_timeout_sec=120 ansible_winrm_read_timeout_sec=150",
+        "--extra-vars",
+        "{{user `ansible_common_vars`}}",
+        "--extra-vars",
+        "{{user `azure_extra_vars`}}",
+        "--extra-vars",
+        "{{user `ansible_extra_vars`}}",
+        "--extra-vars",
+        "{{user `ansible_user_vars`}}",
+        "--extra-vars",
+        "gmsa_keyvault_url={{user `gmsa_keyvault_url`}}"
+      ],
+      "max_retries": 5,
+      "pause_before": "15s",
+      "playbook_file": "ansible/windows/node_windows.yml",
+      "type": "ansible",
+      "use_proxy": false,
+      "user": "packer"
+    },
+    {
+      "restart_timeout": "10m",
+      "type": "windows-restart"
+    },
+    {
+      "arch": "{{user `goss_arch`}}",
+      "download_path": "{{user `goss_download_path`}}",
+      "format": "{{user `goss_format`}}",
+      "format_options": "{{user `goss_format_options`}}",
+      "goss_file": "{{user `goss_entry_file`}}",
+      "inspect": "{{user `goss_inspect_mode`}}",
+      "remote_folder": "{{user `goss_remote_folder`}}",
+      "remote_path": "{{user `goss_remote_path`}}",
+      "skip_install": "{{user `goss_skip_install`}}",
+      "target_os": "Windows",
+      "tests": [
+        "{{user `goss_tests_dir`}}"
+      ],
+      "type": "goss",
+      "url": "{{user `goss_url`}}",
+      "use_sudo": false,
+      "vars_env": {
+        "GOSS_MAX_CONCURRENT": "1",
+        "GOSS_USE_ALPHA": "1"
+      },
+      "vars_file": "{{user `goss_vars_file`}}",
+      "vars_inline": {
+        "OS": "{{user `distribution` | lower}}",
+        "PROVIDER": "azure",
+        "containerd_version": "{{user `containerd_version`}}",
+        "distribution_version": "{{user `distribution_version`}}",
+        "kubernetes_version": "{{user `kubernetes_semver`}}",
+        "pause_image": "{{user `pause_image`}}",
+        "runtime": "{{user `runtime`}}",
+        "ssh_source_url": "{{user `ssh_source_url`}}"
+      },
+      "version": "{{user `goss_version`}}"
+    },
+    {
+      "inline": [
+        "rm -Force -Recurse C:\\var\\log\\kubelet\\*"
+      ],
+      "type": "powershell"
+    },
+    {
+      "elevated_password": "{{.WinRMPassword}}",
+      "elevated_user": "packer",
+      "script": "packer/azure/scripts/sysprep.ps1",
+      "type": "powershell"
+    }
+  ],
+  "variables": {
+    "additional_debug_files": null,
+    "ansible_common_vars": "",
+    "ansible_extra_vars": "",
+    "ansible_user_vars": "",
+    "azure_extra_vars": "wire_server_users={{user `wire_server_users`}}",
+    "azure_location": null,
+    "build_name": null,
+    "build_timestamp": "{{timestamp}}",
+    "client_id": null,
+    "client_secret": null,
+    "cloudbase_init_url": "https://github.com/cloudbase/cloudbase-init/releases/download/{{user `cloudbase_init_version`}}/CloudbaseInitSetup_{{user `cloudbase_init_version` | replace_all `.` `_` }}_x64.msi",
+    "cloudbase_logging_serial_port": "COM2,115200,N,8",
+    "cloudbase_metadata_services": "cloudbaseinit.metadata.services.azureservice.AzureService",
+    "cloudbase_metadata_services_unattend": "cloudbaseinit.metadata.services.base.EmptyMetadataService",
+    "cloudbase_plugins": "cloudbaseinit.plugins.windows.createuser.CreateUserPlugin, cloudbaseinit.plugins.common.setuserpassword.SetUserPasswordPlugin, cloudbaseinit.plugins.windows.extendvolumes.ExtendVolumesPlugin, cloudbaseinit.plugins.common.userdata.UserDataPlugin, cloudbaseinit.plugins.common.ephemeraldisk.EphemeralDiskPlugin, cloudbaseinit.plugins.windows.azureguestagent.AzureGuestAgentPlugin, cloudbaseinit.plugins.common.mtu.MTUPlugin, cloudbaseinit.plugins.common.sethostname.SetHostNamePlugin",
+    "cloudbase_plugins_unattend": "cloudbaseinit.plugins.common.mtu.MTUPlugin",
+    "community_gallery_image_id": "",
+    "containerd_url": "",
+    "containerd_version": null,
+    "direct_shared_gallery_image_id": "",
+    "exclude_from_latest": "false",
+    "gmsa_keyvault_url": "https://kubernetesartifacts.azureedge.net/ccgakvplugin/v1.1.4/binaries/windows-gmsa-ccgakvplugin-v1.1.4.zip",
+    "ib_version": "{{env `IB_VERSION`}}",
+    "image_offer": "",
+    "image_publisher": "",
+    "image_sku": "",
+    "image_version": "latest",
+    "kubernetes_base_url": "https://kubernetesreleases.blob.core.windows.net/kubernetes/{{user `kubernetes_semver`}}/binaries/node/windows/{{user `kubernetes_goarch`}}",
+    "manifest_output": "manifest.json",
+    "nssm_url": null,
+    "os_disk_size_gb": "",
+    "prepull": null,
+    "private_virtual_network_with_public_ip": "",
+    "source_sig_image_name": "",
+    "source_sig_image_version": "",
+    "source_sig_name": "",
+    "source_sig_resource_group_name": "",
+    "source_sig_subscription_id": "",
+    "storage_account_type": "",
+    "subscription_id": null,
+    "virtual_network_name": "",
+    "virtual_network_resource_group_name": "",
+    "virtual_network_subnet_name": "",
+    "vm_size": "",
+    "windows_service_manager": null,
+    "windows_updates_kbs": null,
+    "wire_server_users": ""
+  }
+}

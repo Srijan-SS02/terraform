@@ -1,5 +1,5 @@
 variable "resource_group_name" {
-  default = "k8s_rg"
+  default = "k8_rg"
   description = "Resource group name"
 }
 

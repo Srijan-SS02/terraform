@@ -1,0 +1,19 @@
+# See the OWNERS docs at https://go.k8s.io/owners
+
+approvers:
+  - image-builder-maintainers
+
+reviewers:
+  - image-builder-maintainers
+  - image-builder-reviewers
+
+emeritus_approvers:
+  - akutz
+  - CecileRobertMichon
+  - codenrhoden
+  - detiber
+  - figo
+  - justinsb
+  - luxas
+  - moshloop
+  - timothysc
